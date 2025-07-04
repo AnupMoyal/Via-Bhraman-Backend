@@ -2,6 +2,7 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 
+// Set storage destination and filename
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadPath = 'uploads/';
@@ -14,11 +15,17 @@ const storage = multer.diskStorage({
   }
 });
 
+// Filter only images
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = /jpeg|jpg|png|gif/;
-  const isValid = allowedTypes.test(path.extname(file.originalname).toLowerCase()) &&
-                  allowedTypes.test(file.mimetype);
-  isValid ? cb(null, true) : cb("Only images are allowed!");
+  const filetypes = /jpeg|jpg|png|gif/;
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = filetypes.test(file.mimetype.split('/')[1]); // ✅ FIXED
+
+  if (extname && mimetype) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only image files (jpg, png, gif) are allowed!"));
+  }
 };
 
 const upload = multer({ storage, fileFilter });
