@@ -22,3 +22,18 @@ export const addMultipleGalleryItems = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+export const getGallery = async (req, res) => {
+  try {
+    const galleryItems = await Gallery.find().sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      data: galleryItems,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch gallery items',
+      error: error.message,
+    });
+  }
+};
