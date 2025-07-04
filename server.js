@@ -6,6 +6,7 @@ import authRoutes from "./src/routes/auth.js";
 import contactRoutes from "./src/routes/contact.routes.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
+import galleryRoutes from "./src/routes/galleryRoutes.js";
 
 // Fix for __dirname in ES module
 const __filename = fileURLToPath(import.meta.url);
@@ -19,6 +20,8 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api", contactRoutes);
+app.use("/api/gallery", galleryRoutes);
+
 
 // ✅ Serve static uploads folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
