@@ -17,7 +17,7 @@ const tourPackageSchema = new mongoose.Schema({
   featured: { type: Boolean, default: false },
   isFavorite: { type: Boolean, default: false },
 
-  imageUrls: { type: [String], default: [] }, // Support multiple images
+ // Support multiple images
 
   createdAt: { type: Date, default: Date.now }
 });
