@@ -4,16 +4,29 @@ import {
   getTours,
   getTourById,
   updateTour,
-  deleteTour
+  deleteTour,
+  toggleFavorite
 } from "../controllers/tourController.js";
 import upload from "../middleware/upload.js";
 
 const router = express.Router();
 
-router.post("/", upload.single("image"), addTour);         // ✅ Upload 1 image
-router.get("/", getTours);                                
-router.get("/:id", getTourById);                          
-router.put("/:id", upload.single("image"), updateTour);    // ✅ Image update
-router.delete("/:id", deleteTour);                        
+// ✅ Add new tour with multiple images
+router.post("/", upload.array("images", 10), addTour);
+
+// ✅ Get all tours
+router.get("/", getTours);
+
+// ✅ Get single tour by ID
+router.get("/:id", getTourById);
+
+// ✅ Update tour (with optional image update)
+router.put("/:id", upload.array("images", 10), updateTour);
+
+// ✅ Delete tour
+router.delete("/:id", deleteTour);
+
+// ✅ Toggle favorite
+router.patch("/:id/favorite", toggleFavorite);
 
 export default router;
