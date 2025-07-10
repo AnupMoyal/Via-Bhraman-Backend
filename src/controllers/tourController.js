@@ -17,10 +17,7 @@ export const addTour = async (req, res) => {
       ratingCount,
     } = req.body;
 
-    // If multiple images uploaded (Multer array)
-    const imageUrls = req.files
-      ? req.files.map((file) => `/uploads/${file.filename}`)
-      : [];
+    const imageUrls = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
 
     const newTour = new TourPackage({
       title,
@@ -28,12 +25,12 @@ export const addTour = async (req, res) => {
       city,
       description,
       duration,
-      price,
-      people,
-      featured: featured || false,
-      isFavorite: isFavorite || false,
-      rating: rating || 5,
-      ratingCount: ratingCount || 1,
+      price: Number(price),
+      people: Number(people),
+      featured: featured === "true",
+      isFavorite: isFavorite === "true",
+      rating: Number(rating),
+      ratingCount: Number(ratingCount),
       imageUrls,
     });
 
@@ -88,22 +85,19 @@ export const updateTour = async (req, res) => {
       city,
       description,
       duration,
-      price,
-      people,
-      featured,
-      isFavorite,
-      rating,
-      ratingCount,
+      price: Number(price),
+      people: Number(people),
+      featured: featured === "true",
+      isFavorite: isFavorite === "true",
+      rating: Number(rating),
+      ratingCount: Number(ratingCount),
     };
 
-    // If new images uploaded
     if (req.files && req.files.length > 0) {
-      updateData.imageUrls = req.files.map((file) => `/uploads/${file.filename}`);
+      updateData.imageUrls = req.files.map(file => `/uploads/${file.filename}`);
     }
 
-    const tour = await TourPackage.findByIdAndUpdate(req.params.id, updateData, {
-      new: true,
-    });
+    const tour = await TourPackage.findByIdAndUpdate(req.params.id, updateData, { new: true });
 
     if (!tour) return res.status(404).json({ success: false, message: "Tour not found" });
 
