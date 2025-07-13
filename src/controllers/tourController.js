@@ -1,6 +1,6 @@
 import TourPackage from "../models/TourPackage.js";
 
-// Add new tour
+// ✅ Add new tour
 export const addTour = async (req, res) => {
   try {
     const {
@@ -29,8 +29,8 @@ export const addTour = async (req, res) => {
       people: Number(people),
       featured: featured === "true",
       isFavorite: isFavorite === "true",
-      rating: Number(rating),
-      ratingCount: Number(ratingCount),
+      rating: rating ? Number(rating) : 5,
+      ratingCount: ratingCount ? Number(ratingCount) : 1,
       imageUrls,
     });
 
@@ -41,28 +41,42 @@ export const addTour = async (req, res) => {
   }
 };
 
-// Get all tours
+// ✅ Get all tours (with optional search filter)
 export const getTours = async (req, res) => {
   try {
-    const tours = await TourPackage.find().sort({ createdAt: -1 });
+    const { search } = req.query;
+    let query = {};
+
+    if (search) {
+      const regex = new RegExp(search, "i");
+      query = {
+        $or: [
+          { title: regex },
+          { location: regex },
+          { city: regex },
+        ],
+      };
+    }
+
+    const tours = await TourPackage.find(query).sort({ createdAt: -1 });
     res.status(200).json({ success: true, data: tours });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Error fetching tours" });
+    res.status(500).json({ success: false, message: "Error fetching tours", error: error.message });
   }
 };
 
-// Get single tour
+// ✅ Get single tour by ID
 export const getTourById = async (req, res) => {
   try {
     const tour = await TourPackage.findById(req.params.id);
     if (!tour) return res.status(404).json({ success: false, message: "Tour not found" });
     res.status(200).json({ success: true, data: tour });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Error fetching tour" });
+    res.status(500).json({ success: false, message: "Error fetching tour", error: error.message });
   }
 };
 
-// Update tour
+// ✅ Update tour
 export const updateTour = async (req, res) => {
   try {
     const {
@@ -89,8 +103,8 @@ export const updateTour = async (req, res) => {
       people: Number(people),
       featured: featured === "true",
       isFavorite: isFavorite === "true",
-      rating: Number(rating),
-      ratingCount: Number(ratingCount),
+      rating: rating ? Number(rating) : 5,
+      ratingCount: ratingCount ? Number(ratingCount) : 1,
     };
 
     if (req.files && req.files.length > 0) {
@@ -107,7 +121,7 @@ export const updateTour = async (req, res) => {
   }
 };
 
-// Delete tour
+// ✅ Delete tour
 export const deleteTour = async (req, res) => {
   try {
     const tour = await TourPackage.findByIdAndDelete(req.params.id);
@@ -118,7 +132,7 @@ export const deleteTour = async (req, res) => {
   }
 };
 
-// Toggle favorite
+// ✅ Toggle favorite
 export const toggleFavorite = async (req, res) => {
   try {
     const tour = await TourPackage.findById(req.params.id);
