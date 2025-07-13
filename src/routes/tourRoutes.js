@@ -11,10 +11,11 @@ import upload from "../middleware/upload.js";
 
 const router = express.Router();
 
-router.post("/", upload.array("images", 10), addTour);
+// ✅ Use `any()` to accept files from any field name
+router.post("/", upload.any(), addTour);
 router.get("/", getTours);
 router.get("/:id", getTourById);
-router.put("/:id", upload.array("images", 10), updateTour);
+router.put("/:id", upload.any(), updateTour);
 router.delete("/:id", deleteTour);
 router.patch("/:id/favorite", toggleFavorite);
 
