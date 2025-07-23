@@ -7,11 +7,16 @@ import {
   deleteTour,
   toggleFavorite
 } from "../controllers/tourController.js";
+
+import { searchTours } from "../controllers/searchController.js"; // ✅ Add this line
 import upload from "../middleware/upload.js";
 
 const router = express.Router();
 
-// ✅ Use `any()` to accept files from any field name
+// 🔍 Add Search Route
+router.post("/search", searchTours);
+
+// Existing CRUD routes
 router.post("/", upload.any(), addTour);
 router.get("/", getTours);
 router.get("/:id", getTourById);
