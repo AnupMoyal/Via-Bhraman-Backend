@@ -6,6 +6,7 @@ import authRoutes from "./src/routes/auth.js";
 import contactRoutes from "./src/routes/contact.routes.js";
 import galleryRoutes from "./src/routes/galleryRoutes.js";
 import tourRoutes from "./src/routes/tourRoutes.js";
+import bookingRoutes from "./src/routes/bookingRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -28,6 +29,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api", contactRoutes);
 app.use("/api/gallery", galleryRoutes);
 app.use("/api/tours", tourRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 // Global error handler (for multer or other crashes)
 app.use((err, req, res, next) => {
