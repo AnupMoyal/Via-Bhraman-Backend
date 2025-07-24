@@ -43,4 +43,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log("🙏 Jai Shree Ram");
+  console.log("🙏 Jai Shree Ram");
 });
